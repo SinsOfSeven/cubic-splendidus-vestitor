@@ -68,14 +68,14 @@ to test and solve.
  - add scripts to make toggle mod. 
 
 # GPU Driven Animation Games
- - Honkai Impact 3 崩坏三 
- - Honkai Star Rail 崩坏:星穹铁道 
- - Genshen Impact 原神 
- - Naraka Bladepoint 永劫无间 
- - Kena Bridge Of Spirit 科娜:精神之桥 
- - KALABIYAU 卡拉比丘(测试服) 
- - BLUE PROTOCOLS 蓝色协议
- - SNOWBREAK 尘白禁区
+ - Honkai Impact 3 
+ - Honkai Star Rail 
+ - Genshen Impact 
+ - Naraka Bladepoint 
+ - Kena Bridge Of Spirit 
+ - KALABIYAU 
+ - BLUE PROTOCOLS 
+ - SNOWBREAK 
 
 # Community
 https://discord.gg/gEzkrsvJCt
