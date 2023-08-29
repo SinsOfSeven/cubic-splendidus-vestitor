@@ -354,7 +354,7 @@ def collect_vb_Unity(vb_file_name, collect_stride, ignore_tangent=True):
                         vb_slot_bytearray += data[i:i + position_width + normal_width]
 
                         # TANGENT recalculate use normal value,here we use silent's method.
-                        # buy why? what is the mechanism?
+                        # 这里的忽略Tangent机制，原理是使用Normal替代TANGENT以达到更加近似的效果,但效果远不如KDTree修复
                         vb_slot_bytearray += data[i + position_width:i + position_width + normal_width] + bytearray(
                             struct.pack("f", 1))
                     else:
@@ -466,6 +466,57 @@ def generate_basic_check_ini():
     output_file.close()
 
 
+'''
+Nico: Here you need to know ,the data is from original -vb0.txt file,
+this method use it to get POSITION,NORMAL,TANGENT information.
+
+所谓的data就是file.readlines()这里的文件是原始的txt格式
+'''
+def get_original_tangent(data, position_input):
+    position = position_input
+    print("Replacing tangents with closest originals")
+    raw_points = [x.split(":")[1].strip().split(", ") for x in data if "+000 POSITION:" in x]
+    tangents = [x.split(":")[1].strip().split(", ") for x in data if "+024 TANGENT:" in x]
+
+    # Nico: 我很好奇，这里真的会有长度为4的情况吗？那这种情况下为什么忽略第四个数字？
+    if len(raw_points[0]) == 3:
+        points = [(float(x), float(y), float(z)) for x, y, z in raw_points]
+    else:
+        points = [(float(x), float(y), float(z)) for x, y, z, _ in raw_points]
+    tangents = [(float(x), float(y), float(z), float(a)) for x, y, z, a in tangents]
+
+    # ----------------------------以上格式
+    lookup = {}
+    for x, y in zip(points, tangents):
+        lookup[x] = y
+
+    tree = KDTree(points, 3)
+
+    i = 0
+    while i < len(position):
+        if len(raw_points[0]) == 3:
+            x, y, z = struct.unpack("f", position[i:i + 4])[0], struct.unpack("f", position[i + 4:i + 8])[0], \
+                struct.unpack("f", position[i + 8:i + 12])[0]
+            result = tree.get_nearest((x, y, z))[1]
+            tx, ty, tz, ta = [struct.pack("f", a) for a in lookup[result]]
+            position[i + 24:i + 28] = tx
+            position[i + 28:i + 32] = ty
+            position[i + 32:i + 36] = tz
+            position[i + 36:i + 40] = ta
+            i += 40
+        else:
+            x, y, z = struct.unpack("e", position[i:i + 2])[0], struct.unpack("e", position[i + 2:i + 4])[0], \
+                struct.unpack("e", position[i + 4:i + 6])[0]
+            result = tree.get_nearest((x, y, z))[1]
+            tx, ty, tz, ta = [(int(a * 255)).to_bytes(1, byteorder="big") for a in lookup[result]]
+
+            position[i + 24:i + 25] = tx
+            position[i + 25:i + 26] = ty
+            position[i + 26:i + 27] = tz
+            position[i + 27:i + 28] = ta
+            i += 28
+    return position
+
 if __name__ == "__main__":
     # 首先计算步长
     stride = 0
@@ -497,23 +548,36 @@ if __name__ == "__main__":
             vb_slot_bytearray_dict = collect_vb_UE4(vb_filename, stride, ignore_tangent=ignore_tangent)
 
         print(split_str)
-        for categpory in vb_slot_bytearray_dict:
-            vb_byte_array = vb_slot_bytearray_dict.get(categpory)
+        for vb_slot_categpory in vb_slot_bytearray_dict:
+            print("category:")
+            print(vb_slot_categpory)
+            vb_byte_array = vb_slot_bytearray_dict.get(vb_slot_categpory)
 
             # 获取总的vb_byte_array:
-            vb0_byte_array = vb0_slot_bytearray_dict.get(categpory)
+            vb0_byte_array = vb0_slot_bytearray_dict.get(vb_slot_categpory)
             # 如果为空就初始化一下
             if vb0_byte_array is None:
                 vb0_byte_array = bytearray()
 
             vb0_byte_array = vb0_byte_array + vb_byte_array
-            vb0_slot_bytearray_dict[categpory] = vb0_byte_array
+            vb0_slot_bytearray_dict[vb_slot_categpory] = vb0_byte_array
 
-        # fix_vb_filename = get_filter_filenames(SplitFolder)
-        # calculate nearest TANGENT
+        # calculate nearest TANGENT,we use GIMI's method
+        # see: https://github.com/SilentNightSound/GI-Model-Importer/pull/84
         if repair_tangent == "nearest":
-            # TODO 如何计算TANGENT信息？这始终是一个值得探讨的问题。甚至我觉得这个能单独写一个项目来计算了，所以暂时先不考虑，凑合一下够用了。
-            pass
+            # 读取vb0文件
+            position_hash = category_hash_dict.get(position_categoty)
+            vb0_filename = get_filter_filenames("vb0=" + position_hash, ".txt")[0]
+
+            # 获取position
+            position_vb_array = vb0_slot_bytearray_dict.get(position_categoty)
+
+            with open(WorkFolder + vb0_filename, "r") as vb0_file:
+                data = vb0_file.readlines()
+                position_new = get_original_tangent(data,position_vb_array)
+
+            vb0_slot_bytearray_dict[position_categoty] = position_new
+
             # position_buf = calculate_tangent_nearest(position_buf, vb_filename)
 
         # collect ib
