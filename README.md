@@ -1,9 +1,5 @@
 # 3Dmigoto-Tailor
-This tool is designed to solve the problem in DarkStarSword's blender-3dmigoto.py plugin:
-
-"Only draw calls using a single vertex buffer and a single index are supported now"
-
-This tool is used in 3Dmigoto dump files which use higher vertex buffer slot,
+This tool is used to process 3Dmigoto dump files which use higher vertex buffer slot,
 for example some game only use vb0 to store all information like {Dead or Alive},
 but other games use vb0,vb1,vb2,etc..,Unity game normally use vb0 to store POSITION,NORMAL,TANGENT info,
 use vb1 to store COLOR,TEXCOORD info ,use vb2 to store BLENDWEIGHT or BLENDWEIGHTS, BLENDINDICES info,
@@ -15,25 +11,31 @@ And 3Dmigoto-Tailor is designed to compatible with as many games as it can,so it
 to use,but if you have some patient to read the code,you will know this tool can save a lot of time for you,
 and is very simple to use once you understand the config file architecture.
 
-But use 3Dmigoto to mod game is only restricted on GPU Driven Animation Game,so only part of the games 
+But use 3Dmigoto to mod game is only restricted to Direct X 9, 10 and 11,so only part of the games 
 can use 3Dmigoto, and most of them use Higher buffer slot tech,and Tailor can handle this.
 
 in addition,there is so many useful sctipts,like AnalysisScripts used to do analysis on FrameAnalysis folder,
 like FormatConvert to convert a mod into .ib and .vb file, etc...
 
-Notice: This tool is designed for shader hackers, it may take some time to read the code to know how config work.
+# LICENSE
+GNU General Public License V3.0
 
-# Features
-- You can use this tool to make all paid mod,you can do whatever you want for any mod made with this tool,
-you don't have to turn you mod into free after 30days like AGMG rules,just do what you want to do.
+# DISCLAIMER 
+LICENSES and RIGHTS for works created with this tool are the responsibility of the creators and users to decide, maintain and respect.
+
+You should also know all your work can be reversed by someone else, so you should be mentally prepared
+for your work to be viewed or modified by others.
+
+You should also take some time to understand what copyright is, and how it applies to derivative works. 
+Please do not assume the mods you create are your intellectual property just because you made them. 
+
+Good luck.
+
+# FEATURES
 - Support as many games as it can by simply add the config file for new game.
 - Support both R16_UINT and R32_UINT format.
-- You can reverse other people's mod with scripts in FormatConvert folder, it can turn a producted mod into original
-.ib and .vb format, and then you can import it into blender and modify it
-(removed due to modder's copyright or credit reason, you can ask me to get it when you get ProModder identity 
-in AGMG discord community).
 
-# Design
+# DESIGN 
  - One time only extract one Index Buffer, because only process one is already easy to get error,
 more than one part will be very hard to debug, I have test it a long time before,seems not good, so only
 process one IB in one time.
@@ -55,30 +57,18 @@ to test and solve.
  - add scripts to make toggle mod. 
 
 # GPU Driven Animation Games
- - Honkai Impact 3 
- - Honkai Star Rail 
- - Genshen Impact 
- - Naraka Bladepoint 
- - Kena Bridge Of Spirit 
- - KALABIYAU 
- - BLUE PROTOCOLS 
- - SNOWBREAK 
-
-# Community
-https://discord.gg/gEzkrsvJCt
-
-Join this discord for:
-- Technique support
-- bug-report
-- advice and feedback
-- Other
-
+ - Honkai Impact 3 崩坏三 
+ - Honkai Star Rail 崩坏:星穹铁道 
+ - Genshen Impact 原神 
+ - Naraka Bladepoint 永劫无间 
+ - Kena Bridge Of Spirit 科娜:精神之桥 
+ - KALABIYAU 卡拉比丘(测试服) 
+ - BLUE PROTOCOLS 蓝色协议
+ - SNOWBREAK 尘白禁区
 
 # Acknowledgements
 Without their original 3dmigoto repository the 3Dmigoto-Tailor repository is meanless. 
 Huge thanks to Chiri,DarkStarSword,bo3b and 3Dmigoto original author group.
 
 Special thanks for GIMI&SRMI author: SilentNightSound
-
-
-
+And thank you Airdest, the author of this tool (this is a fork).
