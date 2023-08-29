@@ -44,10 +44,6 @@ just a example .ini file, not the final .ini file, you need to modify it yoursel
  - You have to use DarkStarSword's blend-3dmigoto plugin, which I have already put them in Plugin folder.
 
 # TODO list
- - TANGENT problem, TANGENT value is not the real TANGENT value in Unity game,so it need to be fix,
-currently in Tailor there is only a simple fix copied from GIMI,and we need a complete fix method 
-in the future.
-see: https://github.com/SilentNightSound/GI-Model-Importer/pull/84
  - UE4's BINORMAL problem ,this problem is exists in UE4 game ,like KALABIYAU,SNOWBREAK,BLUEPROTOCOL etc.
 and there is a normal is 4D problem I have already solved,but the rest part BINORMAL or BITANGENT problem still need 
 to test and solve.
