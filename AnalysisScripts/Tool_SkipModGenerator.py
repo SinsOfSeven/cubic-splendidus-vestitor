@@ -31,9 +31,8 @@ if __name__ == "__main__":
     # 然后确定最终写入的mod文件的完整路径
     output_filename = output_folder + "/" + mod_file_name
 
-     # 一个变量用于装载最终文本内容
+    # 一个变量用于装载最终文本内容
     mod_content = ""
-
 
     # 处理TextureOverride
     for override_hash in draw_ibs:
@@ -46,14 +45,6 @@ if __name__ == "__main__":
 
     if basic_check:
         mod_content += get_basic_check_str()
-
-    # 添加作者信息
-    author = "Nicomico_ https://afdian.net/a/nicomico"
-    contactinfo = "Get More mod from gamebanana. https://gamebanana.com/games/17843"
-    discord = "Discord: https://discord.gg/sbtbBFgSuY"
-    mod_content = mod_content + ";" + "Author: "+ author +".\n"
-    mod_content = mod_content + ";" + contactinfo + "\n"
-    mod_content = mod_content + ";" + discord + "\n"
 
     output_file = open(output_filename, "w+")
     output_file.write(mod_content)

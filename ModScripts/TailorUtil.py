@@ -45,7 +45,6 @@ FrameAnalyseFolder = preset_config["General"]["FrameAnalyseFolder"]
 LoaderFolder = preset_config["General"]["LoaderFolder"]
 OutputFolder = preset_config["General"]["OutputFolder"]
 mod_name = preset_config["General"]["mod_name"]
-Author = preset_config["General"]["Author"]
 
 
 def get_latest_folder():
